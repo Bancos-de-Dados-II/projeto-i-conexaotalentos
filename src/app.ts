@@ -5,6 +5,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import { connectToDatabase } from './config/db';
 import userRouter from './routes/user';
+import jobRouter from './routes/job';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 
 // Rotas de usuário
 app.use('/api' , userRouter);
+app.use('/api' , jobRouter);
 
 
 // Conectar ao banco de dados antes de iniciar o servidor (bruno)
