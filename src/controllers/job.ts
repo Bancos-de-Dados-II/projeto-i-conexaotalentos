@@ -1,0 +1,1 @@
+//Controla o CRUD da Vaga

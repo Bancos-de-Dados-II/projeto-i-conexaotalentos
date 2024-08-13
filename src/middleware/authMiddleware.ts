@@ -1,0 +1,1 @@
+//Fara a verificação de token
