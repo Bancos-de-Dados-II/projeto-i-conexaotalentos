@@ -1,49 +1,66 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 interface Job {
-  id: number;
-  titulo: string;
-  localizacao: {
+    _id: string;
+    titulo: string;
+    descricao: string;
     latitude: number;
     longitude: number;
-  };
 }
 
-// Componente para centralizar o mapa
-const CenterMap: React.FC<{ center: [number, number] }> = ({ center }) => {
-  const map = useMap();
-  map.setView(center, map.getZoom());
-  return null;
-};
-
 const JobList: React.FC = () => {
-  const [jobs, setJobs] = useState<Job[]>([]);
+    const [jobs, setJobs] = useState<Job[]>([]);
 
-  useEffect(() => {
-    const fetchJobs = async () => {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/vagas`);
-      setJobs(response.data);
+    const loadJobs = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/jobs`);
+            const jobs = await response.json();
+            setJobs(jobs);
+        } catch (error) {
+            console.error('Erro ao carregar vagas:', error);
+        }
     };
-    fetchJobs();
-  }, []);
 
-  return (
-    <div className="job-list">
-      <h2>Vagas Disponíveis</h2>
-      <MapContainer center={[-15.7801, -47.9292]} zoom={5} style={{ height: '400px', width: '100%' }}>
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <CenterMap center={[-15.7801, -47.9292]} />
-        {jobs.map((job) => (
-          <Marker key={job.id} position={[job.localizacao.latitude, job.localizacao.longitude]}>
-            <Popup>{job.titulo}</Popup>
-          </Marker>
-        ))}
-      </MapContainer>
-    </div>
-  );
+    useEffect(() => {
+        loadJobs();
+    }, []);
+
+    useEffect(() => {
+        jobs.forEach(job => {
+            const map = L.map(`map-${job._id}`).setView([job.latitude, job.longitude], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+            }).addTo(map);
+            L.marker([job.latitude, job.longitude]).addTo(map);
+        });
+    }, [jobs]);
+
+    // Configuração do carrossel
+    const carouselSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1
+    };
+
+    return (
+        <div className="carousel-container">
+            <Slider {...carouselSettings}>
+                {jobs.map(job => (
+                    <div key={job._id} className="job-item">
+                        <h3>{job.titulo}</h3>
+                        <p>{job.descricao}</p>
+                        <div id={`map-${job._id}`} className="map" style={{ height: '200px', width: '100%' }}></div>
+                    </div>
+                ))}
+            </Slider>
+        </div>
+    );
 };
 
 export default JobList;

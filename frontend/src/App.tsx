@@ -1,13 +1,14 @@
 import React from 'react';
-import VagaList from './components/jobList';
-import VagaFormulario from './components/jobForms';
+import JobList from './components/jobList';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import './Styles/App.css';
 
 const App: React.FC = () => {
   return (
-    <div className="app">
-      <h1>Conexo de Talentos</h1>
-      <VagaList />
-      <VagaFormulario />
+    <div className="App">
+      <h1> Nossas Vagas Disponíveis</h1>
+      <JobList />
     </div>
   );
 };

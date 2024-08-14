@@ -1,1 +1,1 @@
-//Controla a autenticação
+//Controlador da noss autenticaçõ -em breve.

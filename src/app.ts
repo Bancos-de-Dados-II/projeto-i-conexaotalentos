@@ -14,8 +14,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Rotas de usuário
+// Rota de usuário
 app.use('/api' , userRouter);
+// Rota de job
 app.use('/api' , jobRouter);
 
 

@@ -1,1 +1,1 @@
-//lógica da autenticação
+//lógica da autenticação - em breve

@@ -1,40 +1,40 @@
 import { Request, Response } from 'express';
 import User from '../models/user';
 
-// Função utilitária para enviar respostas de erro
+// Função Alternativa para correção do envio das msg de erro
 const sendErrorResponse = (res: Response, statusCode: number, message: string) => {
   res.status(statusCode).json({ error: message });
 };
 
-// POST de user
+// POST
 export const createUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name, email, password } = req.body;
     const newUser = new User({ name, email, password });
     await newUser.save();
-    res.status(201).json({ message: 'Usuário criado com sucesso', user: newUser });
-  } catch (error: any) { // Captura de qualquer tipo de erro
-    sendErrorResponse(res, 500, error.message || 'Erro ao criar usuário');
+    res.status(201).json({ message: 'O Usuário foi criado com sucesso', user: newUser });
+  } catch (error: any) { 
+    sendErrorResponse(res, 500, error.message || 'Ocorreu um Erro ao criar usuário');
   }
 };
 
-// GET de user
+// GET
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   try {
     const users = await User.find();
     res.status(200).json(users);
   } catch (error: any) {
-    sendErrorResponse(res, 500, error.message || 'Erro ao buscar usuários');
+    sendErrorResponse(res, 500, error.message || 'Ocorreu um Erro ao buscar usuários');
   }
 };
 
-// GET de user
+// GET
 export const getUserById = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   try {
     const user = await User.findById(id);
     if (!user) {
-      res.status(404).json({ message: 'Usuário não encontrado' });
+      res.status(404).json({ message: 'O Usuário não foi encontrado' });
       return;
     }
     res.status(200).json(user);
@@ -43,7 +43,7 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-// PUT de user pelo id
+// PUT
 export const updateUser = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   const { name, email, password } = req.body;
@@ -55,7 +55,7 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
     }
     res.status(200).json({ message: 'Usuário atualizado com sucesso', user: updatedUser });
   } catch (error: any) {
-    sendErrorResponse(res, 500, error.message || 'Erro ao atualizar usuário');
+    sendErrorResponse(res, 500, error.message || 'Ocorreu um Erro ao atualizar usuário');
   }
 };
 

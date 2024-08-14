@@ -6,7 +6,7 @@ interface IVaga extends Document {
   descricao: string;
   localizacao: {
     type: string;
-    coordinates: [number, number]; // [longitude, latitude]
+    coordinates: [number, number];
   };
   empresa: string;
   salario: number;
